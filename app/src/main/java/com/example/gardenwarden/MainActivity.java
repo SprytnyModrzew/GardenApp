@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("requestcode", String.valueOf(requestCode));
         Log.d("reqddddcode", String.valueOf(resultCode));
-        if(requestCode == 69 && resultCode == RESULT_OK){
+        if(requestCode == requestDeviceDetail && resultCode == RESULT_OK){
             assert data != null;
             Log.d("woop",data.getStringExtra("command"));
             Device device = (Device) data.getSerializableExtra("object");
@@ -65,8 +65,14 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                 delete_watch_event(device.getId());
                 Log.e("edo","do");
             }
+            if(command.equals("update")){
+                assert device != null;
+                String name = data.getStringExtra("newName");
+                update_watch_event(device.getId(), name);
+                Log.e("edo","do");
+            }
         }
-        if(requestCode==70 && resultCode == RESULT_OK){
+        if(requestCode==requestDeviceAdd && resultCode == RESULT_OK){
             assert data != null;
             int id = data.getIntExtra("id",0);
             add_watch_event(id);
@@ -331,6 +337,51 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             public Map<String, String> getParams(){
                 Map<String, String>  params = new HashMap<>();
                 params.put("id",String.valueOf(id_));
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
+    public void update_watch_event(int id_temp, String name_temp){
+        final int id = id_temp;
+        final String name = name_temp;
+        String url =url_main+"/modify/device_name";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        get_devices();
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
+
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+            @Override
+            public Map<String, String> getParams(){
+                Map<String, String>  params = new HashMap<>();
+                Log.e("name",name);
+                Log.e("id",String.valueOf(id));
+                params.put("id",String.valueOf(id));
+                params.put("name",name);
                 return params;
             }
         };

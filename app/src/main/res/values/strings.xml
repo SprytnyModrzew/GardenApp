@@ -2,7 +2,8 @@
     <string name="app_name">GardenWarden</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-    <string name="detail_button_desc">Don\'t watch it</string>
+    <string name="detail_button_desc_0">Rename device</string>
+    <string name="detail_button_desc_1">Don\'t watch it</string>
     <string name="detail_label_name">Device name</string>
     <string name="detail_label_id">Device id</string>
     <string name="detail_label_authority_0">You own the device.</string>
