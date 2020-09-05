@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GardenWarden</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="detail_button_desc">Don\'t watch it</string>
+    <string name="detail_label_name">Device name</string>
+    <string name="detail_label_id">Device id</string>
+    <string name="detail_label_authority_0">You own the device.</string>
+    <string name="detail_label_authority_1">You only watch the device. You can stop watching it.</string>
+
+    <string name="device_add_label">ID of the device</string>
+    <string name="device_add_hint">Type the ID here</string>
+    <string name="device_add_button">Add device</string>
+</resources>
