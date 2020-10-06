@@ -12,4 +12,9 @@
     <string name="device_add_label">ID of the device</string>
     <string name="device_add_hint">Type the ID here</string>
     <string name="device_add_button">Add device</string>
+
+    <string name="login_name_hint">Username</string>
+    <string name="login_pass_hint">Password</string>
+    <string name="login_button_login">Login</string>
+    <string name="login_button_register">Register</string>
 </resources>

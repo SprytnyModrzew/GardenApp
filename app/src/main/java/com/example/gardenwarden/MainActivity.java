@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.db.Device;
 import com.example.gardenwarden.form.DeviceAddActivity;
 import com.example.gardenwarden.form.DeviceDetailActivity;
+import com.example.gardenwarden.form.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -38,6 +39,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener {
     private final int requestDeviceDetail = 69;
     private final int requestDeviceAdd = 70;
+    private final int requestLogin = 71;
 
 
     SharedPreferences sharedPref;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("token",token);
         editor.apply();
+        get_devices();
     }
 
     @Override
@@ -77,6 +80,21 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             int id = data.getIntExtra("id",0);
             add_watch_event(id);
         }
+        if(requestCode==requestLogin && resultCode == RESULT_OK){
+            assert data != null;
+            String command = data.getStringExtra("command");
+            assert command != null;
+            if(command.equals("login")){
+
+
+                final String login = data.getStringExtra("login");
+                final String password = data.getStringExtra("password");
+
+                login(login, password);
+            }
+            Log.d("woo","doo");
+
+        }
     }
 
     @Override
@@ -90,12 +108,19 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
+        String token = sharedPref.getString("token","0");
+        assert token != null;
+        if(token.equals("0")){
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivityForResult(intent,requestLogin);
+        }
+
         FloatingActionButton fab = findViewById(R.id.fab_login);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
-                get_devices();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivityForResult(intent,requestLogin);
             }
         });
 
@@ -104,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             @Override
             public void onClick(View view) {
                 delete_devices();
+                changeToken("0");
             }
         });
 
@@ -136,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
 
     }
 
-    public void login(){
+    public void login(final String login, final String password){
         String url =url_main+"/login";
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -169,8 +195,8 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<>();
-                params.put("login", "superszpital");
-                params.put("password", "valerie");
+                params.put("login", login);
+                params.put("password", password);
 
                 return params;
             }
