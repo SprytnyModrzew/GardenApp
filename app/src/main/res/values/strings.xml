@@ -17,4 +17,10 @@
     <string name="login_pass_hint">Password</string>
     <string name="login_button_login">Login</string>
     <string name="login_button_register">Register</string>
+
+    <string name="toast_rename">Renaming in progress…</string>
+    <string name="toast_error_names_equal">Device names are equal</string>
+
+
+    <string name="error_login">Login unsuccessful. Try again.</string>
 </resources>

@@ -83,10 +83,10 @@ public class DeviceDetailActivity extends AppCompatActivity{
                         if (!(newDeviceName.equals(""))) {
                             if (newDeviceName.equals(oldDeviceName)) {
                                 Toast.makeText(getApplicationContext(),
-                                        "Device names are equal", Toast.LENGTH_SHORT).show();
+                                        R.string.toast_error_names_equal, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getApplicationContext(),
-                                        "Renaming in progress...", Toast.LENGTH_SHORT).show();
+                                        R.string.toast_rename, Toast.LENGTH_SHORT).show();
                                 Intent intent = getIntent();
                                 intent.putExtra("command","update");
                                 intent.putExtra("object",device);

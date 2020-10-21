@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gardenwarden.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +24,10 @@ public class LoginActivity extends AppCompatActivity {
         final TextView password = findViewById(R.id.login_pass);
 
         Button login_button = findViewById(R.id.login_button_login);
+
+        if(getIntent().getBooleanExtra("error",false)){
+            error();
+        }
 
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,5 +44,15 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    public void error(){
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.login_layout), R.string.error_login, Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 }

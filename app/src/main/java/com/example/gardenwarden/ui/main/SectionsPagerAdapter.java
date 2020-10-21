@@ -1,14 +1,17 @@
 package com.example.gardenwarden.ui.main;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.gardenwarden.DeviceFragment;
+import com.example.gardenwarden.device.DeviceFragment;
+import com.example.gardenwarden.PlantFragment;
 import com.example.gardenwarden.R;
 
 /**
@@ -27,6 +30,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -35,7 +39,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             deviceFragment = new DeviceFragment();
             return deviceFragment;
         } else
-        return PlaceholderFragment.newInstance(position + 1);
+        {
+            return new PlantFragment();
+        }
     }
 
     @Nullable
@@ -49,4 +55,5 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Show 2 total pages.
         return 2;
     }
+
 }

@@ -3,19 +3,30 @@ package com.example.gardenwarden;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.db.Device;
+import com.example.gardenwarden.device.DeviceFragment;
 import com.example.gardenwarden.form.DeviceAddActivity;
 import com.example.gardenwarden.form.DeviceDetailActivity;
 import com.example.gardenwarden.form.LoginActivity;
+import com.example.gardenwarden.form.PlantAddActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
@@ -24,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.gardenwarden.ui.main.SectionsPagerAdapter;
 
@@ -31,6 +43,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
     private final int requestDeviceDetail = 69;
     private final int requestDeviceAdd = 70;
     private final int requestLogin = 71;
+    private final int requestPlantAdd = 72;
 
 
     SharedPreferences sharedPref;
@@ -49,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("token",token);
         editor.apply();
-        get_devices();
     }
 
     @Override
@@ -103,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -115,32 +131,38 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             startActivityForResult(intent,requestLogin);
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab_login);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton logoutButton = findViewById(R.id.fab_logout);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivityForResult(intent,requestLogin);
+                logout();
             }
         });
 
-        FloatingActionButton fab2 = findViewById(R.id.fab_refresh);
-        fab2.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton refreshButton = findViewById(R.id.fab_refresh);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 delete_devices();
-                changeToken("0");
             }
         });
 
-        FloatingActionButton fab3 = findViewById(R.id.fab_add);
-        fab3.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addButton = findViewById(R.id.fab_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DeviceAddActivity.class);
-                startActivityForResult(intent,requestDeviceAdd);
+                if(viewPager.getCurrentItem() == 1){
+                    Intent intent = new Intent(getApplicationContext(), DeviceAddActivity.class);
+                    startActivityForResult(intent,requestDeviceAdd);
+                }
+                else{
+                    Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
+                    startActivityForResult(intent,requestPlantAdd);
+                }
             }
         });
+
+        check_version();
     }
 
     @Override
@@ -177,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                             JSONObject object = new JSONObject(response);
                             Log.e("soo",object.get("token").toString());
                             changeToken(object.get("token").toString());
+                            get_devices();
+                            check_version();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -187,7 +211,14 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.e("Error.Response", error.toString());
+                        String token = sharedPref.getString("token","0");
+                        Log.e("coooo","dooo");
+                        assert token != null;
+                        if(token.equals("0")){
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            intent.putExtra("error",true);
+                            startActivityForResult(intent,requestLogin);
+                        }
                     }
                 }
         ) {
@@ -412,6 +443,173 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             }
         };
         queue.add(postRequest);
+    }
+
+    public void check_version(){
+        String url =url_main+"/send/version";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            Log.e("ob", object.get("version").toString());
+                            Log.e("ob",object.get("count").toString());
+                            get_images((Integer) object.get("count"));
+                            get_definitions();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
+
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
+    public void get_images(int count){
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        Log.e("count", String.valueOf(count));
+        for(int i = 0; i<count; i++) {
+            String url =url_main+"/send/picture/"+i;
+            final int finalI = i;
+            ImageRequest postRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap bitmap) {
+                    String filename = "default"+finalI+".png";
+                    File sd = getApplicationContext().getFilesDir();
+                    File dest = new File(sd, filename);
+
+                    try {
+                        bitmap = cropCircle(bitmap);
+                        FileOutputStream out = new FileOutputStream(dest);
+                        Log.e("dest",String.valueOf(dest));
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        Log.e("notdone","error");
+                        e.printStackTrace();
+                    }
+                    Log.e("eo", "done");
+                }
+            }, 600, 600, ImageView.ScaleType.FIT_XY, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("woops","woops");
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String>  params = new HashMap<>();
+                    String token = sharedPref.getString("token","0");
+
+                    params.put("Authorization", "Token "+token);
+                    return params;
+                }
+            };;
+            queue.add(postRequest);
+        }
+    }
+    public void get_definitions(){
+        String url =url_main+"/send/default_definitions";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        String filename = "data.json";
+                        File sd = getApplicationContext().getFilesDir();
+                        File dest = new File(sd, filename);
+
+                        try {
+                            FileOutputStream out = new FileOutputStream(dest);
+                            out.flush();
+                            out.write(response.getBytes());
+                            out.close();
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
+
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+    //https://stackoverflow.com/questions/24295015/cropping-image-into-circle
+    private Bitmap cropCircle(Bitmap bmp) {
+        int widthLight = bmp.getWidth();
+        int heightLight = bmp.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(widthLight, heightLight, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paint = new Paint();
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2 ,heightLight / 2,paint);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bmp, 0, 0, paintImage);
+
+        return output;
+    }
+
+    private void errorMessage(int errorId){
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.main_layout), getResources().getText(errorId).toString(), Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    private void logout(){
+        changeToken("0");
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivityForResult(intent,requestLogin);
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.gardenwarden;
+package com.example.gardenwarden.device;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gardenwarden.R;
 import com.example.gardenwarden.db.Device;
-import com.example.gardenwarden.db.DummyContent;
 
 import java.util.List;
 

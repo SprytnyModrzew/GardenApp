@@ -1,4 +1,4 @@
-package com.example.gardenwarden;
+package com.example.gardenwarden.device;
 
 import android.app.Application;
 
