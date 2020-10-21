@@ -1,4 +1,4 @@
-package com.example.gardenwarden.db;
+package com.example.gardenwarden.db.device;
 
 
 import androidx.annotation.NonNull;

@@ -5,9 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gardenwarden.DefaultPlantFragment;
 import com.example.gardenwarden.R;
-import com.example.gardenwarden.db.Device;
+import com.example.gardenwarden.db.plantdefault.PlantDefault;
+import com.example.gardenwarden.DefaultPlantFragment;
 
 public class PlantAddActivity extends AppCompatActivity implements DefaultPlantFragment.OnListFragmentInteractionListener {
     @Override
@@ -17,17 +17,17 @@ public class PlantAddActivity extends AppCompatActivity implements DefaultPlantF
     }
 
     @Override
-    public void onListFragmentInteraction(DefaultPlantFragment.PlantDefault item) {
+    public void onListFragmentInteraction(PlantDefault item) {
 
     }
 
     @Override
-    public void onListFragmentLongClick(DefaultPlantFragment.PlantDefault item) {
+    public void onListFragmentLongClick(PlantDefault item) {
 
     }
 
     @Override
-    public void onButtonClick(DefaultPlantFragment.PlantDefault mItem) {
+    public void onButtonClick(PlantDefault mItem) {
 
     }
 }

@@ -2,39 +2,38 @@ package com.example.gardenwarden;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gardenwarden.db.Device;
-import com.example.gardenwarden.dummy.DummyContent;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.gardenwarden.db.plantdefault.PlantDefault;
+import com.example.gardenwarden.device.DefaultPlantRecyclerViewAdapter;
+import com.example.gardenwarden.device.PlantDefaultViewModel;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * A fragment representing a list of Items.
  */
 public class DefaultPlantFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 2;
+
+    public PlantDefaultViewModel contactViewModel;
+    public List<PlantDefault>contacts;
+
+    private OnListFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,72 +42,69 @@ public class DefaultPlantFragment extends Fragment {
     public DefaultPlantFragment() {
     }
 
-    public class PlantDefault{
-        String name;
-        String specimen;
-        int defaultImage;
-
-        public PlantDefault(String name, String specimen, int defaultImage) {
-            this.name = name;
-            this.specimen = specimen;
-            this.defaultImage = defaultImage;
-        }
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static DefaultPlantFragment newInstance(int columnCount) {
-        DefaultPlantFragment fragment = new DefaultPlantFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_plant_default_list, container, false);
-
+        final File sd = getActivity().getApplicationContext().getFilesDir();
+        View view = inflater.inflate(R.layout.fragment_device_list, container, false);
+        recyclerView = (RecyclerView) view;
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        if (view != null) {
+            contactViewModel = new ViewModelProvider(this).get(PlantDefaultViewModel.class);
+            contacts = contactViewModel.getPlantDefaults().getValue();
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            String filename = "data.json";
-            File sd = context.getFilesDir();
-            File dest = new File(sd, filename);
-            List<PlantDefault> list = new ArrayList<>();
-            try {
-                String buffer = new Scanner(dest).useDelimiter("\\Z").next();
-                Log.e("buf",buffer);
-                JSONArray defaults_array = new JSONArray(buffer);
-                for(int i = 0; i<defaults_array.length(); i++){
-                    JSONObject object = defaults_array.getJSONObject(i);
-                    list.add(new PlantDefault(object.get("name").toString(),object.get("species").toString(),object.getInt("default_image")));
-
+            recyclerView.setAdapter(new DefaultPlantRecyclerViewAdapter(contacts, mListener, sd));
+            contactViewModel.getPlantDefaults().observe(getViewLifecycleOwner(), new Observer<List<PlantDefault>>() {
+                @Override
+                public void onChanged(List<PlantDefault> contacts) {
+                    Log.i("userrr", "wooop");
+                    recyclerView.setAdapter(new DefaultPlantRecyclerViewAdapter(contacts, mListener,sd));
                 }
-            } catch (FileNotFoundException | JSONException e) {
-                e.printStackTrace();
-            }
-            recyclerView.setAdapter(new DefaultPlantRecyclerViewAdapter(list));
+            });
+
         }
         return view;
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(PlantDefault item);
@@ -117,4 +113,5 @@ public class DefaultPlantFragment extends Fragment {
 
         void onButtonClick(PlantDefault mItem);
     }
+
 }

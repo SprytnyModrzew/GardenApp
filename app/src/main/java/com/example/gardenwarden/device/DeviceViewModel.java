@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.gardenwarden.db.Device;
-import com.example.gardenwarden.db.DeviceRepository;
+import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.device.DeviceRepository;
 
 import java.util.List;
 

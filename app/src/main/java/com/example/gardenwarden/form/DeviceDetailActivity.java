@@ -14,10 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.gardenwarden.R;
-import com.example.gardenwarden.db.Device;
+import com.example.gardenwarden.db.device.Device;
 
 public class DeviceDetailActivity extends AppCompatActivity{
     String oldDeviceName;

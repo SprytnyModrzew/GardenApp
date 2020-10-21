@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gardenwarden.R;
-import com.example.gardenwarden.db.Device;
+import com.example.gardenwarden.db.device.Device;
 
 import java.util.List;
 
@@ -112,11 +112,4 @@ public class DeviceFragment extends Fragment {
         void onButtonClick(Device mItem);
     }
 
-    public void updateRecyclerView(){
-        contacts = contactViewModel.getDevices().getValue();
-        recyclerView.setAdapter(new DeviceRecyclerViewAdapter(contacts, mListener));
-        for(int i = 0; i<contacts.size(); i++){
-        Log.d("eo",contacts.get(i).getDeviceName());
-        }
-    }
 }

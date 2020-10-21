@@ -19,7 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.gardenwarden.db.Device;
+import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.plantdefault.PlantDefault;
+import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
 import com.example.gardenwarden.device.DeviceFragment;
 import com.example.gardenwarden.form.DeviceAddActivity;
 import com.example.gardenwarden.form.DeviceDetailActivity;
@@ -44,9 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -540,23 +540,29 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("Response", response);
-                        String filename = "data.json";
-                        File sd = getApplicationContext().getFilesDir();
-                        File dest = new File(sd, filename);
+                        final String response1 = response;
+                        Thread thread = new Thread(new Runnable(){
 
-                        try {
-                            FileOutputStream out = new FileOutputStream(dest);
-                            out.flush();
-                            out.write(response.getBytes());
-                            out.close();
-
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
+                            @Override
+                            public void run() {
+                                //todo dodać do bazki
+                                PlantDefaultRepository plantDefaultRepository = new PlantDefaultRepository(getApplication());
+                                //plantDefaultRepository.updateDevices();
+                                Log.d("Response", response1);
+                                plantDefaultRepository.deleteDevices();
+                                try {
+                                    JSONArray defaults_array = new JSONArray(response1);
+                                    for(int i = 0; i<defaults_array.length(); i++){
+                                        JSONObject object = defaults_array.getJSONObject(i);
+                                        PlantDefault plantDefault = new PlantDefault(object.get("name").toString(),object.getInt("default_image"));
+                                        plantDefaultRepository.insertDevice(plantDefault);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        thread.start();
                     }
                 },
                 new Response.ErrorListener()

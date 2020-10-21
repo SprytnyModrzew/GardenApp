@@ -1,9 +1,13 @@
-package com.example.gardenwarden.db;
+package com.example.gardenwarden.db.device;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+
+import com.example.gardenwarden.db.AppDatabase;
+import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.device.DeviceDao;
 
 import java.util.List;
 

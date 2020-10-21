@@ -3,53 +3,54 @@ package com.example.gardenwarden.device;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gardenwarden.DefaultPlantFragment;
 import com.example.gardenwarden.R;
-import com.example.gardenwarden.db.device.Device;
 import com.example.gardenwarden.db.DummyContent.DummyItem;
+import com.example.gardenwarden.db.plantdefault.PlantDefault;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class DeviceRecyclerViewAdapter extends RecyclerView.Adapter<DeviceRecyclerViewAdapter.ViewHolder> {
+public class DefaultPlantRecyclerViewAdapter extends RecyclerView.Adapter<DefaultPlantRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Device> mValues;
-    private final DeviceFragment.OnListFragmentInteractionListener mListener;
+    private final List<PlantDefault> mValues;
+    private final DefaultPlantFragment.OnListFragmentInteractionListener mListener;
+    private final File destination;
 
-    DeviceRecyclerViewAdapter(List<Device> items, DeviceFragment.OnListFragmentInteractionListener listener) {
+    public DefaultPlantRecyclerViewAdapter(List<PlantDefault> items, DefaultPlantFragment.OnListFragmentInteractionListener listener, File sd) {
         mValues = items;
         mListener = listener;
+        destination = sd;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_device, parent, false);
+                .inflate(R.layout.fragment_plant_default, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        String text = mValues.get(position).getDeviceName();
+        String text = mValues.get(position).getName();
         holder.mItemText.setText(text);
-        //Log.i("userrr", String.valueOf(getItemCount()));
-        /*
-        holder.mItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onButtonClick(holder.mItem);
-            }
-        });*/
+        String dest = "default"+ holder.mItem.getDefaultImage() +".png";
+        File des = new File(destination,dest);
+        holder.mItemPic.setImageBitmap(BitmapFactory.decodeFile(String.valueOf(des)));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +85,13 @@ public class DeviceRecyclerViewAdapter extends RecyclerView.Adapter<DeviceRecycl
         final View mView;
         final TextView mItemText;
         final ImageView mItemPic;
-        Device mItem;
+        PlantDefault mItem;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
-            mItemText = view.findViewById(R.id.device_name);
-            mItemPic = view.findViewById(R.id.device_img);
+            mItemText = view.findViewById(R.id.default_name);
+            mItemPic = view.findViewById(R.id.default_image);
         }
 
         @NonNull
