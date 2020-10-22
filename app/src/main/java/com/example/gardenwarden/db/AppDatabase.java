@@ -10,9 +10,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.gardenwarden.db.device.Device;
 import com.example.gardenwarden.db.device.DeviceDao;
 import com.example.gardenwarden.db.plantdefault.PlantDefault;
+import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultDao;
 
-@androidx.room.Database(entities = {Device.class, PlantDefault.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {Device.class, PlantDefault.class, PlantDefaultCategory.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 

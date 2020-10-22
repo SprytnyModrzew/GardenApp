@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.db.device.Device;
 import com.example.gardenwarden.db.plantdefault.PlantDefault;
+import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
 import com.example.gardenwarden.device.DeviceFragment;
 import com.example.gardenwarden.form.DeviceAddActivity;
@@ -549,13 +550,24 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                                 PlantDefaultRepository plantDefaultRepository = new PlantDefaultRepository(getApplication());
                                 //plantDefaultRepository.updateDevices();
                                 Log.d("Response", response1);
-                                plantDefaultRepository.deleteDevices();
+                                plantDefaultRepository.deletePlantDefaults();
                                 try {
                                     JSONArray defaults_array = new JSONArray(response1);
                                     for(int i = 0; i<defaults_array.length(); i++){
                                         JSONObject object = defaults_array.getJSONObject(i);
-                                        PlantDefault plantDefault = new PlantDefault(object.get("name").toString(),object.getInt("default_image"));
-                                        plantDefaultRepository.insertDevice(plantDefault);
+                                        JSONArray array = object.getJSONArray("species");
+                                        PlantDefault plantDefault = new PlantDefault(i,object.get("name").toString(),object.getInt("default_image"));
+                                        for(int j = 0; j<array.length(); j++){
+                                            String name = array.getString(j);
+                                            PlantDefaultCategory plantDefaultCategory = new PlantDefaultCategory(
+                                                    name,
+                                                    i
+                                            );
+                                            Log.e("name",name);
+                                            Log.e("id",String.valueOf(i));
+                                            plantDefaultRepository.insertPlantDefaultCategory(plantDefaultCategory);
+                                        }
+                                        plantDefaultRepository.insertPlantDefault(plantDefault);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

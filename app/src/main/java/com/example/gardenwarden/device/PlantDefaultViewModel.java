@@ -18,10 +18,10 @@ public class PlantDefaultViewModel extends AndroidViewModel {
     public PlantDefaultViewModel(@NonNull Application application) {
         super(application);
         deviceRepository = new PlantDefaultRepository(application);
-        devices = deviceRepository.getDevices();
+        devices = deviceRepository.getPlantDefaults();
     }
     public void insert(PlantDefault device){
-        deviceRepository.insertDevice(device);
+        deviceRepository.insertPlantDefault(device);
     }
 
     public LiveData<List<PlantDefault>> getPlantDefaults(){
@@ -29,7 +29,7 @@ public class PlantDefaultViewModel extends AndroidViewModel {
     }
 
     public void updateDevices(List<PlantDefault> devices) {
-        deviceRepository.updateDevices(devices);
+        deviceRepository.updatePlantDefaults(devices);
     }
 }
 

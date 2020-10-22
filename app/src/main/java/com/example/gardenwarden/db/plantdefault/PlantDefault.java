@@ -12,15 +12,19 @@ import java.util.ArrayList;
 
 @Entity(tableName = "plantDefaults")
 public class PlantDefault implements Serializable {
-    @NonNull
     @PrimaryKey
+    int id;
+
+    @NonNull
     String name;
     int defaultImage;
 
-    public PlantDefault(@NonNull String name, int defaultImage) {
+    public PlantDefault(int id, @NonNull String name, int defaultImage) {
+        this.id = id;
         this.name = name;
         this.defaultImage = defaultImage;
     }
+
 
     @NonNull
     public String getName() {
