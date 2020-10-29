@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.gardenwarden.PlantFragment2;
 import com.example.gardenwarden.device.DeviceFragment;
 import com.example.gardenwarden.PlantFragment;
 import com.example.gardenwarden.R;
@@ -40,7 +41,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             return deviceFragment;
         } else
         {
-            return new PlantFragment();
+            return new PlantFragment2();
         }
     }
 

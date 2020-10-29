@@ -28,7 +28,7 @@ public class PlantDefaultViewModel extends AndroidViewModel {
         return devices;
     }
 
-    public void updateDevices(List<PlantDefault> devices) {
+    public void updateDevices(List<PlantDefault> devices) throws InterruptedException {
         deviceRepository.updatePlantDefaults(devices);
     }
 }

@@ -23,8 +23,8 @@ public class PlantDefaultRepository {
         return plantDefaults;
     }
 
-    public LiveData<List<PlantDefaultCategory>> getPlantDefaultCategories(String name) {
-        return plantDefaultDao.getPlantDefaultCategories(plantDefaultDao.getCurrentId(name));
+    public LiveData<List<PlantDefaultCategory>> getPlantDefaultCategories(int id) {
+        return plantDefaultDao.getPlantDefaultCategories(id);
     }
 
     public void insertPlantDefault(PlantDefault plantDefault){
@@ -55,42 +55,44 @@ public class PlantDefaultRepository {
     }
 
     public void deletePlantDefaults(){
-        plantDefaultDao.deleteAll();
+        plantDefaultDao.deleteAllDefaults();
     }
 
-    public void updatePlantDefaults(final List<PlantDefault> plantDefaults) {
+    public void deletePlantDefaultCategories(){
+        plantDefaultDao.deleteAllDefaultCategories();
+    }
+
+    public void updatePlantDefaults(final List<PlantDefault> plantDefaults) throws InterruptedException {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                plantDefaultDao.deleteAll();
+                plantDefaultDao.deleteAllDefaults();
                 Log.d("hh","deleted");
             }
         });
+        thread.start();
+        thread.join();
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 for(int i=0; i<plantDefaults.size(); i++){
                     plantDefaultDao.insertPlantDefault(plantDefaults.get(i));
                 }
             }
         });
-        thread.start();
         thread2.start();
     }
 
-    public void updatePlantDefaultCategories(final List<PlantDefaultCategory> plantDefaults) {
+    public void updatePlantDefaultCategories(final List<PlantDefaultCategory> plantDefaults) throws InterruptedException {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                plantDefaultDao.deleteAll();
+                plantDefaultDao.deleteAllDefaultCategories();
                 Log.d("hh","deleted");
             }
         });
+        thread.start();
+        thread.join();
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,7 +106,6 @@ public class PlantDefaultRepository {
                 }
             }
         });
-        thread.start();
         thread2.start();
     }
 }

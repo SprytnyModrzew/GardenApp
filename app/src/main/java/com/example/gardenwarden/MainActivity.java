@@ -20,6 +20,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.plant.Plant;
+import com.example.gardenwarden.db.plant.PlantRepository;
 import com.example.gardenwarden.db.plantdefault.PlantDefault;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
@@ -53,7 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener, PlantFragment2.OnListFragmentInteractionListener {
     private final int requestDeviceDetail = 69;
     private final int requestDeviceAdd = 70;
     private final int requestLogin = 71;
@@ -462,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                             Log.e("ob",object.get("count").toString());
                             get_images((Integer) object.get("count"));
                             get_definitions();
+                            get_plants();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -546,11 +549,23 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
 
                             @Override
                             public void run() {
-                                //todo dodać do bazki
-                                PlantDefaultRepository plantDefaultRepository = new PlantDefaultRepository(getApplication());
+                                final PlantDefaultRepository plantDefaultRepository = new PlantDefaultRepository(getApplication());
                                 //plantDefaultRepository.updateDevices();
                                 Log.d("Response", response1);
-                                plantDefaultRepository.deletePlantDefaults();
+                                Thread thread1 = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        plantDefaultRepository.deletePlantDefaultCategories();
+                                        plantDefaultRepository.deletePlantDefaults();
+                                    }
+                                });
+                                thread1.start();
+                                try {
+                                    thread1.join();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
                                 try {
                                     JSONArray defaults_array = new JSONArray(response1);
                                     for(int i = 0; i<defaults_array.length(); i++){
@@ -559,12 +574,11 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                                         PlantDefault plantDefault = new PlantDefault(i,object.get("name").toString(),object.getInt("default_image"));
                                         for(int j = 0; j<array.length(); j++){
                                             String name = array.getString(j);
+                                            Log.e(object.get("name").toString(),name);
                                             PlantDefaultCategory plantDefaultCategory = new PlantDefaultCategory(
                                                     name,
                                                     i
                                             );
-                                            Log.e("name",name);
-                                            Log.e("id",String.valueOf(i));
                                             plantDefaultRepository.insertPlantDefaultCategory(plantDefaultCategory);
                                         }
                                         plantDefaultRepository.insertPlantDefault(plantDefault);
@@ -597,6 +611,56 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         };
         queue.add(postRequest);
     }
+
+    public void get_plants(){
+        String url =url_main+"/get/plants";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("response",response);
+                        PlantRepository plantRepository = new PlantRepository(getApplication());
+                        plantRepository.deletePlants();
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            JSONArray jsonArray = object.getJSONArray("data");
+                            Log.e("ro","do");
+                            for(int i = 0; i<jsonArray.length(); i++){
+                                Log.e("ii jest równe",String.valueOf(i));
+                                JSONObject object1 = jsonArray.getJSONObject(i);
+                                Plant plant = new Plant(object1.getInt("id"),object1.getString("name"),object1.getInt("device"),object1.getInt("water_level"),object1.getInt("plant_category"),object1.getString("water_time"));
+                                plantRepository.insertPlant(plant);
+                            }
+                        } catch (JSONException e) {
+                            Log.e("toto","źle jest");
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
+
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
     //https://stackoverflow.com/questions/24295015/cropping-image-into-circle
     private Bitmap cropCircle(Bitmap bmp) {
         int widthLight = bmp.getWidth();
@@ -628,6 +692,21 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         changeToken("0");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivityForResult(intent,requestLogin);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Plant item) {
+
+    }
+
+    @Override
+    public void onListFragmentLongClick(Plant item) {
+
+    }
+
+    @Override
+    public void onButtonClick(Plant mItem) {
+
     }
 }
 

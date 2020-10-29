@@ -19,7 +19,10 @@ public interface PlantDefaultDao {
     LiveData<List<PlantDefault>> getPlantDefaults();
 
     @Query("delete from plantDefaults")
-    void deleteAll();
+    void deleteAllDefaults();
+
+    @Query("delete from plantDefaultCategories")
+    void deleteAllDefaultCategories();
 
     @Query("select * from plantDefaults e join plantDefaultCategories r on e.id = r.parent_id where r.parent_id = :id order by name desc")
     LiveData<List<PlantDefaultCategory>> getPlantDefaultCategories(int id);

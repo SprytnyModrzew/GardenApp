@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 @Entity(tableName = "plantDefaults")
 public class PlantDefault implements Serializable {
+    public int getId() {
+        return id;
+    }
+
     @PrimaryKey
     int id;
 
@@ -23,7 +27,7 @@ public class PlantDefault implements Serializable {
         this.id = id;
         this.name = name;
         this.defaultImage = defaultImage;
-    }
+}
 
 
     @NonNull

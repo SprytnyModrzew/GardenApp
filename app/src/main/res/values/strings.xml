@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GardenWarden</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Plants</string>
+    <string name="tab_text_2">Devices</string>
     <string name="detail_button_desc_0">Rename device</string>
     <string name="detail_button_desc_1">Don\'t watch it</string>
     <string name="detail_label_name">Device name</string>
@@ -20,7 +20,6 @@
 
     <string name="toast_rename">Renaming in progress…</string>
     <string name="toast_error_names_equal">Device names are equal</string>
-
 
     <string name="error_login">Login unsuccessful. Try again.</string>
 </resources>
