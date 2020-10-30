@@ -17,6 +17,12 @@ public class Device implements Serializable {
 
     private int privilegeLevel;
 
+    public int getMaxPlants() {
+        return maxPlants;
+    }
+
+    private int maxPlants;
+
 
     public int getId() {
         return id;
@@ -31,9 +37,10 @@ public class Device implements Serializable {
         return privilegeLevel;
     }
 
-    public Device(int id, @NonNull String deviceName, int privilegeLevel) {
+    public Device(int id, @NonNull String deviceName, int privilegeLevel, int maxPlants) {
         this.id = id;
         this.deviceName = deviceName;
         this.privilegeLevel = privilegeLevel;
+        this.maxPlants = maxPlants;
     }
 }

@@ -36,6 +36,20 @@ public class DeviceRepository {
         thread.start();
     }
 
+    public int getSlots(int id) throws InterruptedException {
+        final int id1 = id;
+        final int[] left = new int[1];
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                left[0] = deviceDao.getUsedSlots(id1);
+            }
+        });
+        thread.start();
+        thread.join();
+        return left[0];
+    }
+
     public void updateDevices(final List<Device> devices) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -62,4 +76,6 @@ public class DeviceRepository {
         thread.start();
         thread2.start();
     }
+
+
 }

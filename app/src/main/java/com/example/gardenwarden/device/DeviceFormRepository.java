@@ -1,4 +1,4 @@
-package com.example.gardenwarden.db.plant;
+package com.example.gardenwarden.device;
 
 import android.app.Application;
 import android.util.Log;
@@ -7,49 +7,54 @@ import androidx.lifecycle.LiveData;
 
 import com.example.gardenwarden.db.AppDatabase;
 import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.device.DeviceDao;
 
 import java.util.List;
 
-public class PlantRepository {
-    private PlantDao plantDao;
-    private LiveData<List<Plant>> plants;
+public class DeviceFormRepository {
+    private DeviceDao deviceDao;
+    private LiveData<List<Device>> devices;
 
-    public PlantRepository(Application application) {
+    public DeviceFormRepository(Application application) {
         AppDatabase deviceDatabase = AppDatabase.getInstance(application);
-        plantDao = deviceDatabase.plantDao();
-        plants = plantDao.getPlants();
+        deviceDao = deviceDatabase.deviceDao();
+        devices = deviceDao.getAvailableDevices();
     }
 
-    public LiveData<List<Plant>> getPlants(){
-        return plants;
+    public LiveData<List<Device>> getDevices(){
+        return devices;
     }
 
-    public void insertPlant(Plant plant) {
-        final Plant plant1 = plant;
+    public void insertDevice(Device device){
+        final Device device1 = device;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                plantDao.insertPlant(plant1);
+                deviceDao.insertDevice(device1);
             }
         });
         thread.start();
     }
 
-    public void deletePlants() {
+    public int getSlots(int id) throws InterruptedException {
+        final int id1 = id;
+        final int[] left = new int[1];
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                plantDao.deleteAll();
+                left[0] = deviceDao.getUsedSlots(id1);
             }
         });
         thread.start();
+        thread.join();
+        return left[0];
     }
 
-    public void updatePlants(final List<Plant> devices) throws InterruptedException {
+    public void updateDevices(final List<Device> devices) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                plantDao.deleteAll();
+                deviceDao.deleteAll();
                 Log.d("hh","deleted");
             }
         });
@@ -62,14 +67,15 @@ public class PlantRepository {
                     e.printStackTrace();
                 }
                 for(int i=0; i<devices.size(); i++){
-                    Log.d("i:", String.valueOf(devices.get(i).getWaterTime()));
+                    Log.d("i:", String.valueOf(devices.get(i).getDeviceName()));
 
-                    plantDao.insertPlant(devices.get(i));
+                    deviceDao.insertDevice(devices.get(i));
                 }
             }
         });
         thread.start();
-        thread.join();
         thread2.start();
     }
+
+
 }

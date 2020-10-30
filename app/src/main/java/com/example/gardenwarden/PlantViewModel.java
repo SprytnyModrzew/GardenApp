@@ -30,7 +30,7 @@ public class PlantViewModel extends AndroidViewModel {
         return devices;
     }
 
-    public void updateDevices(List<Plant> devices) {
+    public void updateDevices(List<Plant> devices) throws InterruptedException {
         deviceRepository.updatePlants(devices);
     }
 }

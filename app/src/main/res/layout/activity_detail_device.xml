@@ -7,6 +7,44 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/device_label_plants2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/detail_label_plants_used"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/device_label_id"
+        app:layout_constraintTop_toBottomOf="@+id/device_detail_name" />
+
+    <TextView
+        android:id="@+id/device_detail_plants2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/device_detail_id"
+        app:layout_constraintTop_toBottomOf="@+id/device_label_plants" />
+
+    <TextView
+        android:id="@+id/device_detail_plants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/device_detail_name"
+        app:layout_constraintTop_toBottomOf="@+id/device_label_plants" />
+
+    <TextView
+        android:id="@+id/device_label_plants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/detail_label_plants_max"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/device_label_name"
+        app:layout_constraintTop_toBottomOf="@+id/device_detail_name" />
+
+    <TextView
         android:id="@+id/device_label_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +74,7 @@
         android:fontFamily="sans-serif-black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/device_detail_name" />
+        app:layout_constraintTop_toBottomOf="@+id/device_detail_plants" />
 
     <Button
         android:id="@+id/detail_device_button_delete"

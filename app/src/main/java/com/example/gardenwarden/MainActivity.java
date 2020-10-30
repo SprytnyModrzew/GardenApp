@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                                 Log.d("i:", String.valueOf(i));
                                 JSONArray temp = good.getJSONArray(i);
                                 int id = (int) temp.get(0);
-                                Device device = new Device(id,temp.get(1).toString(),(int)temp.get(2));
+                                Device device = new Device(id,temp.get(1).toString(),(int)temp.get(2), (int)temp.get(3));
                                 devices.add(device);
                             }
                             sectionsPagerAdapter.deviceFragment.contactViewModel.updateDevices(devices);
@@ -622,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                     public void onResponse(String response) {
                         Log.e("response",response);
                         PlantRepository plantRepository = new PlantRepository(getApplication());
-                        plantRepository.deletePlants();
+                        List<Plant> plants = new ArrayList<>();
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray jsonArray = object.getJSONArray("data");
@@ -631,10 +631,15 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                                 Log.e("ii jest równe",String.valueOf(i));
                                 JSONObject object1 = jsonArray.getJSONObject(i);
                                 Plant plant = new Plant(object1.getInt("id"),object1.getString("name"),object1.getInt("device"),object1.getInt("water_level"),object1.getInt("plant_category"),object1.getString("water_time"));
-                                plantRepository.insertPlant(plant);
+                                plants.add(plant);
                             }
                         } catch (JSONException e) {
                             Log.e("toto","źle jest");
+                            e.printStackTrace();
+                        }
+                        try {
+                            plantRepository.updatePlants(plants);
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
 

@@ -19,4 +19,10 @@ public interface DeviceDao {
 
     @Query("delete from devices")
     void deleteAll();
+
+    @Query("select count(*) from devices join plants on devices.id=plants.deviceId where devices.id=:id")
+    int getUsedSlots(int id);
+
+    @Query("select * from devices d where d.maxPlants>(select count(*) from devices join plants on devices.id=plants.deviceId where devices.id=d.id) order by deviceName desc")
+    LiveData<List<Device>> getAvailableDevices();
 }

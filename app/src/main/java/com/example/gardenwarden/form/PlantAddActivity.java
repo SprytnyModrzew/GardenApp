@@ -16,9 +16,10 @@ import com.example.gardenwarden.db.device.Device;
 import com.example.gardenwarden.db.plantdefault.PlantDefault;
 import com.example.gardenwarden.DefaultPlantFragment;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
+import com.example.gardenwarden.device.DeviceFormFragment;
 import com.example.gardenwarden.device.DeviceFragment;
 
-public class PlantAddActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener,DefaultPlantFragment.OnListFragmentInteractionListener, PlantSubDefaultFragment.OnListFragmentInteractionListener {
+public class PlantAddActivity extends AppCompatActivity implements DeviceFormFragment.OnListFragmentInteractionListener,DefaultPlantFragment.OnListFragmentInteractionListener, PlantSubDefaultFragment.OnListFragmentInteractionListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

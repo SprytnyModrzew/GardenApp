@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gardenwarden.R;
 import com.example.gardenwarden.db.device.Device;
+import com.example.gardenwarden.db.device.DeviceRepository;
 
 public class DeviceDetailActivity extends AppCompatActivity{
     String oldDeviceName;
@@ -28,6 +29,8 @@ public class DeviceDetailActivity extends AppCompatActivity{
         TextView name = findViewById(R.id.device_detail_name);
         TextView id = findViewById(R.id.device_detail_id);
         TextView auth = findViewById(R.id.device_detail_ownership);
+        TextView maxPlants = findViewById(R.id.device_detail_plants);
+        TextView leftPlants = findViewById(R.id.device_detail_plants2);
 
         final Intent intent = getIntent();
         device = (Device) intent.getSerializableExtra("object");
@@ -36,6 +39,16 @@ public class DeviceDetailActivity extends AppCompatActivity{
         oldDeviceName = device.getDeviceName();
         name.setText(oldDeviceName);
         id.setText(String.valueOf(device.getId()));
+
+        DeviceRepository deviceRepository = new DeviceRepository(getApplication());
+        int slots = 69;
+        try {
+            slots = deviceRepository.getSlots(device.getId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        leftPlants.setText(String.valueOf(slots));
+        maxPlants.setText(String.valueOf(device.getMaxPlants()));
         Button action_button = findViewById(R.id.detail_device_button_delete);
         if(device.getPrivilegeLevel()==0){
             action_button.setText(R.string.detail_button_desc_0);
