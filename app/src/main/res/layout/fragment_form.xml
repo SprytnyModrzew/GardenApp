@@ -35,34 +35,95 @@
         android:id="@+id/form_time_picker_hours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="96dp"
-        android:layout_marginRight="96dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="96dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.56" />
+        app:layout_constraintTop_toBottomOf="@+id/form_label_time" />
 
     <TextView
-        android:id="@+id/form_label_"
+        android:id="@+id/form_label_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="160dp"
         android:text="@string/form_time_label"
-        app:layout_constraintBottom_toTopOf="@+id/form_time_picker_hours"
         app:layout_constraintEnd_toEndOf="@+id/form_time_picker_hours"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_label_water" />
 
     <TextView
         android:id="@+id/form_label_water"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="72dp"
         android:text="@string/form_water_level"
-        app:layout_constraintEnd_toEndOf="@+id/form_label_"
+        app:layout_constraintEnd_toEndOf="@+id/form_label_time"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/form_label_"
+        app:layout_constraintStart_toStartOf="@+id/form_label_time"
+        app:layout_constraintTop_toBottomOf="@+id/form_label_name" />
+
+    <TextView
+        android:id="@+id/form_label_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="@string/form_name_label"
+        app:layout_constraintStart_toStartOf="@+id/form_label_water"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/form_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginRight="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/form_label_name"
+        app:layout_constraintTop_toBottomOf="@+id/form_label_name" />
+
+    <RadioGroup
+        android:id="@+id/form_radiogroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginRight="96dp"
+        app:layout_constraintBottom_toTopOf="@+id/form_label_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/form_label_water"
+        app:layout_constraintTop_toBottomOf="@+id/form_label_water"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RadioButton
+            android:id="@+id/form_radio_button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_radio_1" />
+
+        <RadioButton
+            android:id="@+id/form_radio_button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_radio_2" />
+
+        <RadioButton
+            android:id="@+id/form_radio_button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_radio_3" />
+
+        <RadioButton
+            android:id="@+id/form_radio_button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_radio_4" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

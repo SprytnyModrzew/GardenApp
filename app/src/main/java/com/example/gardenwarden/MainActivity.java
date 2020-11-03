@@ -114,18 +114,26 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             Log.d("woo","doo");
 
         }
+        if(requestCode==requestPlantAdd && resultCode == RESULT_OK){
+            get_plants();
+            get_devices();
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences("network content",Context.MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("url",url_main);
+        editor.apply();
 
         String token = sharedPref.getString("token","0");
         assert token != null;
@@ -620,6 +628,19 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                 {
                     @Override
                     public void onResponse(String response) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PlantRepository plantRepository = new PlantRepository(getApplication());
+                                plantRepository.deletePlants();
+                            }
+                        });
+                        thread.start();
+                        try {
+                            thread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Log.e("response",response);
                         PlantRepository plantRepository = new PlantRepository(getApplication());
                         List<Plant> plants = new ArrayList<>();

@@ -23,6 +23,13 @@
     <string name="form_water_level">Water level:</string>
     <string name="form_time_label">Time of watering:</string>
     <string name="form_add_button">Add new plant</string>
+    <string name="form_name_label">Name of plant:</string>
+
+    <string name="form_radio_1">Low</string>
+    <string name="form_radio_2">Medium</string>
+    <string name="form_radio_3">High</string>
+    <string name="form_radio_4">Rice</string>
+
 
     <string name="toast_rename">Renaming in progress…</string>
     <string name="toast_error_names_equal">Device names are equal</string>

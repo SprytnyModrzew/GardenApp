@@ -9,13 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TimePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.gardenwarden.R;
+import com.example.gardenwarden.form.FormPlant;
 
-import java.util.Arrays;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,18 +31,23 @@ public class FormFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    OnButtonClicked callback;
+    private int waterId;
+
+    ArrayList<RadioButton> radioButtons;
+    OnFormFragmentInteractionListener callback;
 
 
-    public void setClickedListener(OnButtonClicked callback) {
+    public void setClickedListener(OnFormFragmentInteractionListener callback) {
         this.callback = callback;
     }
 
-    public FormFragment() {
+    public FormFragment(int waterId2) {
+        waterId=waterId2;
         // Required empty public constructor
     }
 
@@ -54,7 +61,7 @@ public class FormFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static FormFragment newInstance(String param1, String param2) {
-        FormFragment fragment = new FormFragment();
+        FormFragment fragment = new FormFragment(0);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,26 +84,42 @@ public class FormFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_form, container, false);
         Button button = root.findViewById(R.id.form_date_picker);
+        radioButtons = new ArrayList<>();
+        radioButtons.add((RadioButton) root.findViewById(R.id.form_radio_button1));
+        radioButtons.add((RadioButton) root.findViewById(R.id.form_radio_button2));
+        radioButtons.add((RadioButton) root.findViewById(R.id.form_radio_button3));
+        radioButtons.add((RadioButton) root.findViewById(R.id.form_radio_button4));
 
-        final NumberPicker picker= (NumberPicker) root.findViewById(R.id.form_time_picker_minutes);
-        picker.setMinValue(0);
-        picker.setMaxValue(7);
-        picker.setDisplayedValues(new String[]{"00", "30", "00","30","00", "30", "00","30"});
-        picker.setOnLongPressUpdateInterval(100);
+        radioButtons.get(waterId).setChecked(true);
 
-        NumberPicker picker2= (NumberPicker) root.findViewById(R.id.form_time_picker_hours);
+        final NumberPicker pickerMinute = root.findViewById(R.id.form_time_picker_minutes);
+        pickerMinute.setMinValue(0);
+        pickerMinute.setMaxValue(7);
+        pickerMinute.setDisplayedValues(new String[]{"00", "30", "00","30","00", "30", "00","30"});
+        pickerMinute.setOnLongPressUpdateInterval(100);
 
-        picker2.setMinValue(0);
-        picker2.setMaxValue(23);
+        final NumberPicker pickerHour= root.findViewById(R.id.form_time_picker_hours);
 
-        picker2.setDisplayedValues(new String[]{"01", "02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"});
+        final EditText editText = root.findViewById(R.id.form_edit_text);
+
+        pickerHour.setMinValue(0);
+        pickerHour.setMaxValue(23);
+
+        pickerHour.setDisplayedValues(new String[]{"01", "02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"});
 
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Log.e("eoo", String.valueOf(picker.getValue()));
-                callback.onAddButtonClick();
+                Log.e("eoo", String.valueOf(pickerMinute.getValue()));
+                int waterLevel = 0;
+
+                for(int i=0; i<radioButtons.size();i++){
+                    if(radioButtons.get(i).isChecked())
+                        waterLevel=i;
+                }
+                FormPlant plant = new FormPlant(waterLevel,editText.getText().toString(),pickerMinute.getValue(),pickerHour.getValue()+1);
+                callback.onAddButtonClick(plant);
             }
         });
 
@@ -104,7 +127,7 @@ public class FormFragment extends Fragment {
         return root;
     }
 
-    public interface OnButtonClicked{
-        void onAddButtonClick();
+    public interface OnFormFragmentInteractionListener {
+        void onAddButtonClick(FormPlant plant);
     }
 }
