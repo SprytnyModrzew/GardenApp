@@ -15,7 +15,7 @@ import com.example.gardenwarden.db.plantdefault.PlantDefault;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultDao;
 
-@androidx.room.Database(entities = {Device.class, PlantDefault.class, PlantDefaultCategory.class, Plant.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {Device.class, PlantDefault.class, PlantDefaultCategory.class, Plant.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 

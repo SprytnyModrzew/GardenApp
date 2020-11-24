@@ -1,7 +1,6 @@
 package com.example.gardenwarden.ui.main;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,9 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.gardenwarden.PlantFragment2;
-import com.example.gardenwarden.device.DeviceFragment;
-import com.example.gardenwarden.PlantFragment;
+import com.example.gardenwarden.recyclerViews.plant.PlantFragment;
+import com.example.gardenwarden.recyclerViews.device.DeviceFragment;
 import com.example.gardenwarden.R;
 
 /**
@@ -41,7 +39,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             return deviceFragment;
         } else
         {
-            return new PlantFragment2();
+            return new PlantFragment();
         }
     }
 

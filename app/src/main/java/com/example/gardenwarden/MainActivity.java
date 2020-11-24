@@ -25,11 +25,13 @@ import com.example.gardenwarden.db.plant.PlantRepository;
 import com.example.gardenwarden.db.plantdefault.PlantDefault;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultCategory;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
-import com.example.gardenwarden.device.DeviceFragment;
-import com.example.gardenwarden.form.DeviceAddActivity;
-import com.example.gardenwarden.form.DeviceDetailActivity;
-import com.example.gardenwarden.form.LoginActivity;
-import com.example.gardenwarden.form.PlantAddActivity;
+import com.example.gardenwarden.details.PlantDetailActivity;
+import com.example.gardenwarden.recyclerViews.device.DeviceFragment;
+import com.example.gardenwarden.forms.deviceAdd.DeviceAddActivity;
+import com.example.gardenwarden.details.DeviceDetailActivity;
+import com.example.gardenwarden.forms.userAdd.LoginActivity;
+import com.example.gardenwarden.forms.plantAdd.PlantAddActivity;
+import com.example.gardenwarden.recyclerViews.plant.PlantFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -55,8 +57,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener, PlantFragment2.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener, PlantFragment.OnListFragmentInteractionListener {
     private final int requestDeviceDetail = 69;
+    private final int requestPlantDetail = 73;
     private final int requestDeviceAdd = 70;
     private final int requestLogin = 71;
     private final int requestPlantAdd = 72;
@@ -504,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         Log.e("count", String.valueOf(count));
         for(int i = 0; i<count; i++) {
             String url =url_main+"/send/picture/"+i;
-            final int finalI = i;
+            final int finalI = i+1;
             ImageRequest postRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
                 @Override
                 public void onResponse(Bitmap bitmap) {
@@ -576,16 +579,19 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
 
                                 try {
                                     JSONArray defaults_array = new JSONArray(response1);
+                                    int counter = 0;
                                     for(int i = 0; i<defaults_array.length(); i++){
                                         JSONObject object = defaults_array.getJSONObject(i);
                                         JSONArray array = object.getJSONArray("species");
                                         PlantDefault plantDefault = new PlantDefault(i,object.get("name").toString(),object.getInt("default_image"));
+                                        Log.e("def image", String.valueOf(object.getInt("default_image")));
                                         for(int j = 0; j<array.length(); j++){
                                             String name = array.getString(j);
-                                            Log.e(object.get("name").toString(),name);
+                                            Log.e(object.get("name").toString(),name + j+i);
                                             PlantDefaultCategory plantDefaultCategory = new PlantDefaultCategory(
                                                     name,
-                                                    i
+                                                    i,
+                                                    counter++
                                             );
                                             plantDefaultRepository.insertPlantDefaultCategory(plantDefaultCategory);
                                         }
@@ -651,6 +657,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                             for(int i = 0; i<jsonArray.length(); i++){
                                 Log.e("ii jest równe",String.valueOf(i));
                                 JSONObject object1 = jsonArray.getJSONObject(i);
+                                Log.e("ii jest równe",String.valueOf(object1.getInt("plant_category")));
                                 Plant plant = new Plant(object1.getInt("id"),object1.getString("name"),object1.getInt("device"),object1.getInt("water_level"),object1.getInt("plant_category"),object1.getString("water_time"));
                                 plants.add(plant);
                             }
@@ -722,7 +729,9 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
 
     @Override
     public void onListFragmentInteraction(Plant item) {
-
+        Intent intent = new Intent(this, PlantDetailActivity.class);
+        intent.putExtra("object",item);
+        startActivityForResult(intent,requestPlantDetail);
     }
 
     @Override

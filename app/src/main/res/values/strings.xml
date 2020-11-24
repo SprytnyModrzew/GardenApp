@@ -30,6 +30,11 @@
     <string name="form_radio_3">High</string>
     <string name="form_radio_4">Rice</string>
 
+    <string name="detail_plant_label_name">Name of plant:</string>
+    <string name="detail_plant_label_type">Type of plant:</string>
+    <string name="detail_measure_list_type_label">Type:</string>
+    <string name="detail_measure_list_measurement_label">Value:</string>
+
 
     <string name="toast_rename">Renaming in progress…</string>
     <string name="toast_error_names_equal">Device names are equal</string>

@@ -1,11 +1,12 @@
 package com.example.gardenwarden.db.plant;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "plants")
-public class Plant {
+public class Plant implements Serializable {
     @PrimaryKey
     private int id;
 
@@ -14,6 +15,7 @@ public class Plant {
     private int deviceId;
     private int waterLevel;
     private int plantCategory;
+
 
     private String waterTime;
 

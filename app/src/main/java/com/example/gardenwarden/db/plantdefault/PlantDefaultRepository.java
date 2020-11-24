@@ -59,7 +59,9 @@ public class PlantDefaultRepository {
     }
 
     public void deletePlantDefaultCategories(){
+        Log.e("u","usuwsam");
         plantDefaultDao.deleteAllDefaultCategories();
+
     }
 
     public void updatePlantDefaults(final List<PlantDefault> plantDefaults) throws InterruptedException {
@@ -107,5 +109,35 @@ public class PlantDefaultRepository {
             }
         });
         thread2.start();
+    }
+
+    public int getDefaultImage(final int id) throws InterruptedException {
+        final int[] x = {0};
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                x[0] = plantDefaultDao.getDefaultImage(id);
+                Log.d("hh","got default image");
+            }
+        });
+        thread.start();
+        thread.join();
+        Log.e("image",String.valueOf(x[0]));
+        return x[0];
+    }
+    public String getCategoryName(final int id) throws InterruptedException {
+        final String[] x = new String[1];
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                x[0] = plantDefaultDao.getName(id);
+                Log.d("hh","got default image");
+            }
+        });
+        thread.start();
+        thread.join();
+        Log.e("type","cycki"+x[0]);
+        return x[0];
     }
 }
