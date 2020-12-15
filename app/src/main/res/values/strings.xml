@@ -13,7 +13,18 @@
 
     <string name="device_add_label">ID of the device</string>
     <string name="device_add_hint">Type the ID here</string>
-    <string name="device_add_button">Add device</string>
+    <string name="device_add_button">Add device to watchlist</string>
+
+    <string name="device_add_own_url_label">URL to connect to the device</string>
+    <string name="device_add_own_url_hint">Type the URL here</string>
+
+    <string name="device_add_own_name_label">Name your device</string>
+    <string name="device_add_own_name_hint">Type the name here</string>
+
+    <string name="device_add_own_slots_label">Number of slots</string>
+    <string name="device_add_own_slots_hint">Type the number of slots available</string>
+
+    <string name="device_add_own_button">Add your own device</string>
 
     <string name="login_name_hint">Username</string>
     <string name="login_pass_hint">Password</string>
@@ -42,4 +53,13 @@
     <string name="error_login">Login unsuccessful. Try again.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="button_monday">M</string>
+    <string name="button_tuesday">T</string>
+    <string name="button_wednesday">W</string>
+    <string name="button_thursday">T</string>
+    <string name="button_friday">F</string>
+    <string name="button_saturday">S</string>
+    <string name="button_sunday">S</string>
+
 </resources>

@@ -107,12 +107,14 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             String command = data.getStringExtra("command");
             assert command != null;
             if(command.equals("login")){
-
-
                 final String login = data.getStringExtra("login");
                 final String password = data.getStringExtra("password");
-
                 login(login, password);
+            }
+            if(command.equals("register")){
+                final String login = data.getStringExtra("login");
+                final String password = data.getStringExtra("password");
+                register(login, password);
             }
             Log.d("woo","doo");
 
@@ -218,6 +220,49 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        String token = sharedPref.getString("token","0");
+                        Log.e("coooo","dooo");
+                        assert token != null;
+                        if(token.equals("0")){
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            intent.putExtra("error",true);
+                            startActivityForResult(intent,requestLogin);
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<>();
+                params.put("login", login);
+                params.put("password", password);
+
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+    public void register(final String login, final String password){
+        String url =url_main+"/add/user";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.e("Response", response);
+                        if(response.equals("ok"))
+                            login(login, password);
                     }
                 },
                 new Response.ErrorListener()

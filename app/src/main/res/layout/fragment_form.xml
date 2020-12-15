@@ -35,9 +35,9 @@
         android:id="@+id/form_time_picker_hours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginTop="8dp"
         android:layout_marginEnd="96dp"
-
         android:layout_marginRight="96dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -48,12 +48,12 @@
         android:id="@+id/form_label_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="32dp"
         android:text="@string/form_time_label"
         app:layout_constraintEnd_toEndOf="@+id/form_time_picker_hours"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/form_label_water" />
+        app:layout_constraintTop_toBottomOf="@+id/form_day_buttons" />
 
     <TextView
         android:id="@+id/form_label_water"
@@ -70,7 +70,7 @@
         android:id="@+id/form_label_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="32dp"
         android:text="@string/form_name_label"
         app:layout_constraintStart_toStartOf="@+id/form_label_water"
         app:layout_constraintTop_toTopOf="parent" />
@@ -126,4 +126,82 @@
             android:layout_height="wrap_content"
             android:text="@string/form_radio_4" />
     </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/form_day_buttons"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_radiogroup">
+
+        <ToggleButton
+            android:id="@+id/form_monday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_monday"
+            android:textOn="@string/button_monday" />
+
+        <ToggleButton
+            android:id="@+id/form_tuesday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_tuesday"
+            android:textOn="@string/button_tuesday" />
+
+        <ToggleButton
+            android:id="@+id/form_wednesday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_wednesday"
+            android:textOn="@string/button_wednesday" />
+
+        <ToggleButton
+            android:id="@+id/form_thursday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_thursday"
+            android:textOn="@string/button_thursday" />
+
+        <ToggleButton
+            android:id="@+id/form_friday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_friday"
+            android:textOn="@string/button_friday" />
+
+        <ToggleButton
+            android:id="@+id/form_saturday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_saturday"
+            android:textOn="@string/button_saturday" />
+
+        <ToggleButton
+            android:id="@+id/form_sunday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:textOff="@string/button_sunday"
+            android:textOn="@string/button_sunday" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

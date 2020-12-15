@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -161,10 +162,38 @@ public class PlantAddActivity extends AppCompatActivity implements
 
     }
 
+    String getDaysString(){
+        String string = "";
+        ToggleButton button = findViewById(R.id.form_monday);
+        if(button.isChecked()) string = string+"1";
+
+        button = findViewById(R.id.form_tuesday);
+        if(button.isChecked()) string = string+"2";
+
+        button = findViewById(R.id.form_wednesday);
+        if(button.isChecked()) string = string+"3";
+
+        button = findViewById(R.id.form_thursday);
+        if(button.isChecked()) string = string+"4";
+
+        button = findViewById(R.id.form_friday);
+        if(button.isChecked()) string = string+"5";
+
+        button = findViewById(R.id.form_saturday);
+        if(button.isChecked()) string = string+"6";
+
+        button = findViewById(R.id.form_sunday);
+        if(button.isChecked()) string = string+"7";
+
+        return string;
+    }
+
     @Override
     public void onAddButtonClick(final FormPlant plant){
         String url_main = sharedPref.getString("url","0");
         String url =url_main+"/add/plant";
+        final String days = getDaysString();
+        Log.e("string",days);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
@@ -203,6 +232,7 @@ public class PlantAddActivity extends AppCompatActivity implements
                 params.put("water_time", plant.getWaterTime());
                 params.put("device_id", String.valueOf(device.getId()));
                 params.put("plant_id", plantDefaultCategory.getName());
+                params.put("water_days", days);
 
                 return params;
             }

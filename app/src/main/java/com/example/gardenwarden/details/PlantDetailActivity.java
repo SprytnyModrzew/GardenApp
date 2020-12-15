@@ -45,7 +45,7 @@ public class PlantDetailActivity extends AppCompatActivity {
 
     SharedPreferences sharedPref;
     Context context;
-
+    Timer requestTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +83,7 @@ public class PlantDetailActivity extends AppCompatActivity {
 
         getMeasurements(currentPlant);
 
-        Timer requestTimer = new Timer();
+        requestTimer = new Timer();
         requestTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -116,8 +116,13 @@ public class PlantDetailActivity extends AppCompatActivity {
                             MeasurementFragment fragment = (MeasurementFragment) fg.findFragmentById(R.id.detail_measurements);
 
                             assert fragment != null;
-                            fragment.updateRecyclerView(measurements);
-
+                            try {
+                                fragment.updateRecyclerView(measurements);
+                            }
+                            catch(NullPointerException e){
+                                Log.e("woo","woo");
+                                requestTimer.cancel();
+                            }
 
                         } catch (JSONException e) {
                             Log.e("toto","źle jest");

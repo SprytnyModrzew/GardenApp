@@ -6,6 +6,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/device_own_add_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/device_add_own_url_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/device_add_label"
+        app:layout_constraintTop_toBottomOf="@+id/device_own_add_label_name" />
+
+    <TextView
+        android:id="@+id/device_own_add_label_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/device_add_own_name_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_own_add_url" />
+
+    <EditText
+        android:id="@+id/device_own_add_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/device_add_own_url_hint"
+        android:importantForAutofill="no"
+        android:inputType="textUri"
+        app:layout_constraintStart_toStartOf="@+id/device_add_label"
+        app:layout_constraintTop_toBottomOf="@+id/device_own_add_label_url" />
+
+    <TextView
+        android:id="@+id/device_own_add_label_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/device_add_own_url_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_add_button" />
+
     <TextView
         android:id="@+id/device_add_label"
         android:layout_width="wrap_content"
@@ -33,9 +79,28 @@
         android:id="@+id/device_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/device_add_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/device_add_id" />
+
+    <NumberPicker
+        android:id="@+id/device_add_own_number"
+        android:layout_width="52dp"
+        android:layout_height="159dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_own_add_name" />
+
+    <Button
+        android:id="@+id/device_add_own_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/device_add_own_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_add_own_number" />
 </androidx.constraintlayout.widget.ConstraintLayout>
