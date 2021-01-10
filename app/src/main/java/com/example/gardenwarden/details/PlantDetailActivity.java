@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -90,6 +91,64 @@ public class PlantDetailActivity extends AppCompatActivity {
                 getMeasurements(currentPlant);
             }
         }, 5, 30000);
+
+        Button delete_button = findViewById(R.id.button_plant_delete);
+
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePlant(currentPlant);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        requestTimer.cancel();
+        super.onBackPressed();
+    }
+
+    public void deletePlant(final Plant plant){
+        String url_main = sharedPref.getString("url","0");
+        String url =url_main+"/delete/plant";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        requestTimer.cancel();
+                        Log.e("yay",response);
+                        PlantDetailActivity.super.onBackPressed();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
+
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String>  params = new HashMap<>();
+                params.put("plant_id", String.valueOf(plant.getId()));
+                params.put("device_id", String.valueOf(plant.getDeviceId()));
+                return params;
+            }
+        };
+        queue.add(postRequest);
     }
 
     public void getMeasurements(final Plant plant){

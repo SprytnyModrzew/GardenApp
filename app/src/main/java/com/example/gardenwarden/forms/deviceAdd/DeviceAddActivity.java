@@ -52,6 +52,11 @@ public class DeviceAddActivity extends AppCompatActivity {
                             public void onResponse(String response) {
                                 Log.e("yay","something happend");
                                 Log.e("yr",response);
+                                if(response.equals("good")){
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
                             }
                         },
                         new Response.ErrorListener()

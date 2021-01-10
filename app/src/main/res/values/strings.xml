@@ -2,7 +2,7 @@
     <string name="app_name">GardenWarden</string>
     <string name="tab_text_1">Plants</string>
     <string name="tab_text_2">Devices</string>
-    <string name="detail_button_desc_0">Rename device</string>
+    <string name="detail_button_desc_0">Delete device</string>
     <string name="detail_button_desc_1">Don\'t watch it</string>
     <string name="detail_label_name">Device name</string>
     <string name="detail_label_id">Device id</string>
@@ -28,6 +28,7 @@
 
     <string name="login_name_hint">Username</string>
     <string name="login_pass_hint">Password</string>
+    <string name="login_register_hint">Email (if you wish to register)</string>
     <string name="login_button_login">Login</string>
     <string name="login_button_register">Register</string>
 
@@ -39,7 +40,9 @@
     <string name="form_radio_1">Low</string>
     <string name="form_radio_2">Medium</string>
     <string name="form_radio_3">High</string>
-    <string name="form_radio_4">Rice</string>
+    <string name="form_radio_4">Very High</string>
+
+    <string name="detail_plant_delete">Delete plant</string>
 
     <string name="detail_plant_label_name">Name of plant:</string>
     <string name="detail_plant_label_type">Type of plant:</string>
@@ -47,7 +50,7 @@
     <string name="detail_measure_list_measurement_label">Value:</string>
 
 
-    <string name="toast_rename">Renaming in progress…</string>
+    <string name="toast_rename">Deleting in progress…</string>
     <string name="toast_error_names_equal">Device names are equal</string>
 
     <string name="error_login">Login unsuccessful. Try again.</string>

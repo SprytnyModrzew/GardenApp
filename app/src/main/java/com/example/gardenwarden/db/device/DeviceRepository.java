@@ -25,6 +25,10 @@ public class DeviceRepository {
         return devices;
     }
 
+    public LiveData<List<Device>> getAvailableDevices(){
+        return deviceDao.getAvailableDevices();
+    }
+
     public void insertDevice(Device device){
         final Device device1 = device;
         Thread thread = new Thread(new Runnable() {

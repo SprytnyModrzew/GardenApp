@@ -91,11 +91,13 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                 Log.e("edo","do");
             }
             if(command.equals("update")){
-                assert device != null;
-                String name = data.getStringExtra("newName");
-                update_watch_event(device.getId(), name);
                 Log.e("edo","do");
             }
+            get_devices();
+            get_plants();
+        }
+        if(requestCode == requestPlantDetail && resultCode == RESULT_OK){
+            get_plants();
         }
         if(requestCode==requestDeviceAdd && resultCode == RESULT_OK){
             assert data != null;
@@ -114,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             if(command.equals("register")){
                 final String login = data.getStringExtra("login");
                 final String password = data.getStringExtra("password");
-                register(login, password);
+                final String email = data.getStringExtra("email");
+                register(login, password, email);
             }
             Log.d("woo","doo");
 
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         String token = sharedPref.getString("token","0");
         assert token != null;
         if(token.equals("0")){
+
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivityForResult(intent,requestLogin);
         }
@@ -250,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         };
         queue.add(postRequest);
     }
-    public void register(final String login, final String password){
+    public void register(final String login, final String password, final String email){
         String url =url_main+"/add/user";
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -287,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                 Map<String, String>  params = new HashMap<>();
                 params.put("login", login);
                 params.put("password", password);
+                params.put("email", email);
 
                 return params;
             }

@@ -28,7 +28,7 @@ public class DefaultPlantFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 2;
 
-    public PlantDefaultViewModel contactViewModel;
+    public DefaultPlantViewModel contactViewModel;
     public List<PlantDefault>contacts;
 
     private OnListFragmentInteractionListener mListener;
@@ -55,7 +55,7 @@ public class DefaultPlantFragment extends Fragment {
         recyclerView = (RecyclerView) view;
         // Set the adapter
         if (view != null) {
-            contactViewModel = new ViewModelProvider(this).get(PlantDefaultViewModel.class);
+            contactViewModel = new ViewModelProvider(this).get(DefaultPlantViewModel.class);
             contacts = contactViewModel.getPlantDefaults().getValue();
             Context context = view.getContext();
             if (mColumnCount <= 1) {

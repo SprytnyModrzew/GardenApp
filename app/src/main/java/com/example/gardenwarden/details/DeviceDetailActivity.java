@@ -1,7 +1,9 @@
 package com.example.gardenwarden.details;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,16 +17,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.R;
 import com.example.gardenwarden.db.device.Device;
 import com.example.gardenwarden.db.device.DeviceRepository;
+import com.example.gardenwarden.db.plant.Plant;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DeviceDetailActivity extends AppCompatActivity{
     String oldDeviceName;
     Device device;
+    SharedPreferences sharedPref;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = this.getSharedPreferences("network content", Context.MODE_PRIVATE);
         setContentView(R.layout.activity_detail_device);
         TextView name = findViewById(R.id.device_detail_name);
         TextView id = findViewById(R.id.device_detail_id);
@@ -56,7 +70,7 @@ public class DeviceDetailActivity extends AppCompatActivity{
             action_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    makeAlert();
+                    deleteDevice(device);
                 }
             });
         }
@@ -119,6 +133,47 @@ public class DeviceDetailActivity extends AppCompatActivity{
 
         alertDialog.show();
     }
+    public void deleteDevice(final Device device){
+        String url_main = sharedPref.getString("url","0");
+        String url =url_main+"/delete/device";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        Intent intent = getIntent();
+                        intent.putExtra("command","update");
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap<>();
+                String token = sharedPref.getString("token","0");
 
+                params.put("Authorization", "Token "+token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String>  params = new HashMap<>();
+                params.put("device_id", String.valueOf(device.getId()));
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
 
 }

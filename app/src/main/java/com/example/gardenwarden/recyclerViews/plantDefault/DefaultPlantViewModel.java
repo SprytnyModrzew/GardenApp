@@ -11,11 +11,11 @@ import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
 
 import java.util.List;
 
-public class PlantDefaultViewModel extends AndroidViewModel {
+public class DefaultPlantViewModel extends AndroidViewModel {
     private PlantDefaultRepository deviceRepository;
     private LiveData<List<PlantDefault>> devices;
 
-    public PlantDefaultViewModel(@NonNull Application application) {
+    public DefaultPlantViewModel(@NonNull Application application) {
         super(application);
         deviceRepository = new PlantDefaultRepository(application);
         devices = deviceRepository.getPlantDefaults();
