@@ -163,7 +163,8 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete_devices();
+                get_devices();
+                get_plants();
             }
         });
 
@@ -393,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                     public void onResponse(String response) {
                         // response
                         get_devices();
+                        get_plants();
                         Log.d("Response", response);
                     }
                 },
@@ -434,6 +436,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                     public void onResponse(String response) {
                         // response
                         get_devices();
+                        get_plants();
                         Log.d("Respons22e", response);
                     }
                 },
@@ -709,6 +712,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                                 JSONObject object1 = jsonArray.getJSONObject(i);
                                 Log.e("ii jest równe",String.valueOf(object1.getInt("plant_category")));
                                 Plant plant = new Plant(object1.getInt("id"),object1.getString("name"),object1.getInt("device"),object1.getInt("water_level"),object1.getInt("plant_category"),object1.getString("water_time"));
+                                Log.e("objectDeviceId", String.valueOf(object1.getInt("device")));
                                 plants.add(plant);
                             }
                         } catch (JSONException e) {

@@ -28,7 +28,7 @@
 
     <string name="login_name_hint">Username</string>
     <string name="login_pass_hint">Password</string>
-    <string name="login_register_hint">Email (if you wish to register)</string>
+    <string name="login_register_hint">Email (to register)</string>
     <string name="login_button_login">Login</string>
     <string name="login_button_register">Register</string>
 

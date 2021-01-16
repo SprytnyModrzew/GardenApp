@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gardenwarden.R;
+import com.example.gardenwarden.db.device.DeviceRepository;
 import com.example.gardenwarden.db.plant.Plant;
 import com.example.gardenwarden.db.plantdefault.PlantDefaultRepository;
 import com.example.gardenwarden.forms.plantAdd.FormPlant;
@@ -60,6 +61,7 @@ public class PlantDetailActivity extends AppCompatActivity {
         int plantId = currentPlant.getPlantCategory();
         plantName.setText(currentPlant.getName());
         int imagePath = 0;
+
         String type = "";
         Log.e("plantID",String.valueOf(plantId));
         PlantDefaultRepository plantDefaultRepository = new PlantDefaultRepository(getApplication());
@@ -92,6 +94,15 @@ public class PlantDetailActivity extends AppCompatActivity {
             }
         }, 5, 30000);
 
+        DeviceRepository deviceRepository = new DeviceRepository(getApplication());
+        int privilegeLevel = 69;
+        try {
+            privilegeLevel = deviceRepository.getPrivilegeLevel(currentPlant.getDeviceId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.e("privilege", String.valueOf(privilegeLevel));
+
         Button delete_button = findViewById(R.id.button_plant_delete);
 
         delete_button.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +111,10 @@ public class PlantDetailActivity extends AppCompatActivity {
                 deletePlant(currentPlant);
             }
         });
+
+        if(privilegeLevel == 1){
+            delete_button.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -119,7 +134,9 @@ public class PlantDetailActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         requestTimer.cancel();
                         Log.e("yay",response);
-                        PlantDetailActivity.super.onBackPressed();
+                        Intent intent = getIntent();
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                 },
                 new Response.ErrorListener()

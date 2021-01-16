@@ -26,5 +26,6 @@ public interface DeviceDao {
     @Query("select * from devices d where d.maxPlants>(select count(*) from devices join plants on devices.id=plants.deviceId where devices.id=d.id) and d.privilegeLevel == 0 order by deviceName desc")
     LiveData<List<Device>> getAvailableDevices();
 
-
+    @Query("select d.privilegeLevel from devices d where d.id=:id")
+    int getPrivilegeLevel(int id);
 }

@@ -202,7 +202,7 @@ public class PlantAddActivity extends AppCompatActivity implements
                     @Override
                     public void onResponse(String response) {
                         Log.e("yay","something happend");
-                        Intent intent = new Intent();
+                        Intent intent = getIntent();
                         setResult(RESULT_OK, intent);
                         finish();
                     }
