@@ -527,8 +527,20 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
                             Log.e("ob", object.get("version").toString());
                             Log.e("ob",object.get("count").toString());
                             get_images((Integer) object.get("count"));
-                            get_definitions();
-                            get_plants();
+
+                            double d = object.getDouble("version");
+                            float f = (float)d;
+
+                            if(f>sharedPref.getFloat("version", 0.0f)){
+                                get_definitions();
+                                get_plants();
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putFloat("version", f);
+                                editor.apply();
+                            }
+                            else{
+                                Log.e("nope","nope");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -632,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
 
                                 try {
                                     JSONArray defaults_array = new JSONArray(response1);
-                                    int counter = 0;
+                                    int counter = 1;
                                     for(int i = 0; i<defaults_array.length(); i++){
                                         JSONObject object = defaults_array.getJSONObject(i);
                                         JSONArray array = object.getJSONArray("species");
